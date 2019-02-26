@@ -1,71 +1,23 @@
-var vehicles = [
-    {
-        year: 2018,
-        make: "Ford",
-        model: "F-150",
-        trim: "Raptor",
-        price: 87500,
-        mileage:12000,
-        cylinders:8,
-        horsepower:4000,
-        color: "red",
-        image: "./img/ford-raptor.jpg",
-        features: ["off-road tires", "4x4", "Bluetooth adapter", "race suspension", "lift kit"]
-    },
-    {
-        year: 2017,
-        make: "Nissan",
-        model: "Rogue",
-        trim: "Base",
-        price: 14000,
-        mileage:600,
-        cylinders:4,
-        horsepower:30,
-        color: "purple",
-        image: "./img/nissan-rogue.jpg",
-        features: ["baby seat", "bluetooth adapter"]
-    },
-    {
-        year: 2015,
-        make: "Chevrolet",
-        model: "Malibu",
-        trim: "XS",
-        price: 15000,
-        mileage:5200,
-        cylinders:6,
-        horsepower:60,
-        color: "yellow",
-        image: "./img/chevrolet-malibu.jpg",
-        features: ["GPS","backup camera", "seat warmers"]
-    },
-    {
-        year: 1934,
-        make: "Ford",
-        model: "Model T",
-        trim: "Base",
-        price: 150000,
-        mileage:300000,
-        cylinders:2,
-        horsepower:2,
-        color: "brown",
-        image: "./img/ford-model-t.jpg",
-        features: ["crank start", "windshield"]
-    }
-];
-
+$(document).ready(initializePage);
 
 function initializePage(){
     console.log("init page!", vehicles);
-
     buildMenu();
 }
+
+var comparisonCarsArray = [];
+
+
+
+
+
 
 function buildMenu(){
     var target = $("#vehicle-list");
     
     target.empty();
 
-    for(x=0;x<vehicles.length;x++){
+    for(var x=0;x<vehicles.length;x++){
         var vehicle = vehicles[x];
 
         var li = $("<li></li>");
@@ -76,16 +28,59 @@ function buildMenu(){
         var img = $("<img />")
                     .attr("src", vehicle.image);
         
-        var fig = $("<figure></figure>")
-                    .append(img)
-                    .append(caption);
+        var createdFigure = makeDatFig( vehicles[x])
+        createdFigure.append(img)
+        createdFigure.append(caption)
+
+        //createdFigure[0].carData = vehicles[x];
         
-        li.append(fig);                        
+        li.append(createdFigure);                        
 
         target.append(li);
     }
 
 }
 
+function makeDatFig(carData){
+    var fig = $("<figure>")
+        .click( function(){
+            addCompareCar( carData );
+    })
+    return fig;
+}
 
-$(document).ready(initializePage);
+function addCompareCar(car){
+    comparisonCarsArray.push( car );
+    if( comparisonCarsArray.length === 2){
+        compareCars();
+    }
+}
+/*
+                  <div class="name"></div>
+                    <div class="color"></div>
+                    <div class="price"></div>
+                    <div class="mileage"></div>
+                    <div class="cylinders"></div>
+*/
+function compareCars(){
+    while(comparisonCarsArray.length){
+        
+        var currentCar = comparisonCarsArray.pop();
+        var clonedElement = $("#compareColumn").clone();
+        clonedElement.prop('id','');
+        clonedElement.find('.name').text( currentCar.year + ' ' + currentCar.make + ' ' + currentCar.model + ' ' + currentCar.trim );
+        clonedElement.find('.color').text(currentCar.color);
+        clonedElement.find('.price').text(currentCar.price);
+        clonedElement.find('.mileage').text(currentCar.mileage);
+        clonedElement.find('.cylinders').text(currentCar.cyclinders);
+        $('.compareColumn').eq(comparisonCarsArray.length).append(clonedElement);
+    }
+
+}
+
+
+
+
+
+
+
