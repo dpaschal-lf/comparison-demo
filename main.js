@@ -53,6 +53,7 @@ function addCompareCar(car){
     comparisonCarsArray.push( car );
     if( comparisonCarsArray.length === 2){
         compareCars();
+        comparisonCarsArray = [];
     }
 }
 /*
@@ -63,16 +64,22 @@ function addCompareCar(car){
                     <div class="cylinders"></div>
 */
 function compareCars(){
+    $('.compareColumn').empty();
     while(comparisonCarsArray.length){
         
         var currentCar = comparisonCarsArray.pop();
         var clonedElement = $("#compareColumn").clone();
         clonedElement.prop('id','');
-        clonedElement.find('.name').text( currentCar.year + ' ' + currentCar.make + ' ' + currentCar.model + ' ' + currentCar.trim );
-        clonedElement.find('.color').text(currentCar.color);
-        clonedElement.find('.price').text(currentCar.price);
-        clonedElement.find('.mileage').text(currentCar.mileage);
-        clonedElement.find('.cylinders').text(currentCar.cyclinders);
+        var children = clonedElement.find('*');
+        for( var i = 0; i< children.length; i++){
+            var innerText = $(children[i]).text();
+
+            if( innerText[0] === '{' && innerText.slice(-1) === '}'){
+                var searchingFor = innerText.slice(1,-1);
+                $(children[i]).text( currentCar[searchingFor]);
+            }                
+
+        }
         $('.compareColumn').eq(comparisonCarsArray.length).append(clonedElement);
     }
 

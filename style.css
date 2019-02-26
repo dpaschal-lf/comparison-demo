@@ -22,3 +22,7 @@ ul#vehicle-list li figure{
 ul#vehicle-list li figure img{
     height:150px;
 }
+
+.templateHolder{
+	display: none;
+}
